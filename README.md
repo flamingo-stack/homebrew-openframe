@@ -18,13 +18,13 @@ Run the command shown in your OpenFrame tenant under **Devices → Add device**:
 sudo openframe-client auth --serverUrl <tenant host> --initialKey <key> --orgId <organization id> --userId <user id>
 ```
 
-The device registers within a minute. `openframe-client doctor` checks its health.
+The device registers within a minute. `sudo openframe-client doctor` checks its health.
 
 ## Updates
 
-Updates are delivered by the OpenFrame platform, not by Homebrew. The cask version is the release it installs; the running agent moves ahead of it on its own.
+Updates are delivered by the OpenFrame platform, not by Homebrew. The cask version is the release a new install starts from; the running agent moves ahead of it on its own.
 
-`brew reinstall --cask openframe-client` deregisters the device and returns it to the waiting state; run `auth` again afterwards.
+When the cask version changes, `brew upgrade` also upgrades this cask (Homebrew 7 upgrades casks marked `auto_updates`). An upgrade, like `brew reinstall --cask openframe-client`, runs the uninstall first: the device is deregistered and returns to the waiting state. Run `auth` again afterwards, or keep `brew upgrade` away from it with `export HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1`.
 
 ## Uninstall
 
