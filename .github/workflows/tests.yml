@@ -1,0 +1,18 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  audit:
+    runs-on: macos-latest
+    steps:
+      - uses: Homebrew/actions/setup-homebrew@main
+
+      - name: Style
+        run: brew style flamingo-stack/openframe
+
+      - name: Audit
+        run: brew audit --cask --strict --online flamingo-stack/openframe/openframe-client
