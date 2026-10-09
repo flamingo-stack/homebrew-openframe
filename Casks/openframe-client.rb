@@ -1,6 +1,6 @@
 cask "openframe-client" do
-  version "1.5.22"
-  sha256 "ce0c3b5346a7f5e48f0a329e074ce9f3ea844af2c8098c6058e28ca6875f1e17"
+  version "1.5.33"
+  sha256 "b43484d2078e9e0c526a124351fa4665846342ba625bc59361506b821ed0b146"
 
   url "https://openframe.ai/v0/api/assets/download?agent=client&platform=macos&version=#{version}"
   name "OpenFrame Client"
