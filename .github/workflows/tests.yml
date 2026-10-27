@@ -4,10 +4,21 @@ on:
   push:
     branches: [main]
   pull_request:
+  schedule:
+    - cron: "41 6 * * *"   # daily: the casks have no version, so a release can break them
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  audit:
+  test:
     runs-on: macos-latest
+    timeout-minutes: 20
     steps:
       - uses: Homebrew/actions/setup-homebrew@main
 
@@ -16,3 +27,24 @@ jobs:
 
       - name: Audit
         run: brew audit --cask --strict --online --tap flamingo-stack/openframe
+
+      - name: Install and uninstall
+        run: |
+          for cask in openframe-client openframe-client@stage openframe-client@dev; do
+            brew install --cask "flamingo-stack/openframe/$cask"
+            sudo launchctl print system/com.openframe.client > /dev/null
+            brew uninstall --cask "flamingo-stack/openframe/$cask"
+            if sudo launchctl print system/com.openframe.client > /dev/null 2>&1; then
+              echo "::error::$cask left the service loaded"; exit 1
+            fi
+          done
+
+  all-checks:
+    name: "All Checks"
+    needs: test
+    runs-on: ubuntu-latest
+    if: always() && github.event_name == 'pull_request'   # required check on the main ruleset
+    steps:
+      - if: ${{ needs.test.result != 'success' }}
+        run: exit 1
+      - run: echo "All checks passed"
