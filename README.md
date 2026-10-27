@@ -8,6 +8,8 @@ Homebrew tap for the [OpenFrame](https://openframe.ai/) device agent, `openframe
 brew install --cask flamingo-stack/openframe/openframe-client
 ```
 
+Pre-production platforms have their own cask: `openframe-client@stage` (openframe.miami) and `openframe-client@dev` (qa.openframe.build). Install the one matching your tenant; the three conflict, so only one is installed at a time.
+
 Homebrew asks for your password once: the cask registers the system service `com.openframe.client` (a LaunchDaemon). The service stays idle and sends nothing until the device is connected.
 
 ## Connect the device
@@ -22,9 +24,9 @@ The device registers within a minute. `sudo openframe-client doctor` checks its 
 
 ## Updates
 
-Updates are delivered by the OpenFrame platform, not by Homebrew. The cask version is the release a new install starts from; the running agent moves ahead of it on its own.
+Updates are delivered by the OpenFrame platform, not by Homebrew. The casks have no version: a new install downloads the platform's current release, and the running agent updates itself from there.
 
-When the cask version changes, `brew upgrade` also upgrades this cask (Homebrew 7 upgrades casks marked `auto_updates`). An upgrade, like `brew reinstall --cask openframe-client`, runs the uninstall first: the device is deregistered and returns to the waiting state. Run `auth` again afterwards, or keep `brew upgrade` away from it with `export HOMEBREW_NO_UPGRADE_AUTO_UPDATES_CASKS=1`.
+`brew upgrade` skips these casks. `brew upgrade --greedy` and `brew reinstall --cask openframe-client` run the uninstall first: the device is deregistered and returns to the waiting state. Run `auth` again afterwards.
 
 ## Uninstall
 

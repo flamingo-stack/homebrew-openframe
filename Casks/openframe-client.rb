@@ -1,17 +1,14 @@
 cask "openframe-client" do
-  version "1.5.89"
-  sha256 "104b3c2e20922f0fe74ed89da307ff73b35b325baebc52b96f78ff25a75b63a0"
+  # The download serves the platform's current release; the agent updates itself from there.
+  version :latest
+  sha256 :no_check
 
-  url "https://openframe.ai/v0/api/assets/download?agent=client&platform=macos&version=#{version}"
+  url "https://openframe.ai/v0/api/assets/download?agent=client&platform=macos"
   name "OpenFrame Client"
   desc "Device agent for remote monitoring and management"
   homepage "https://openframe.ai/"
 
-  livecheck do
-    skip "Updates are delivered by the OpenFrame platform"
-  end
-
-  auto_updates true
+  conflicts_with cask: ["openframe-client@dev", "openframe-client@stage"]
   depends_on :macos
 
   installer script: {
