@@ -30,4 +30,10 @@ cask "openframe-client@stage" do
     "/Library/LaunchDaemons/com.openframe.client.plist",
     "/Library/Logs/OpenFrame",
   ]
+
+  caveats <<~EOS
+    The service waits until the device is connected. Run the command shown in
+    your OpenFrame tenant under Devices > Add device:
+      sudo openframe-client auth --serverUrl <tenant host> --initialKey <key> --orgId <organization id>
+  EOS
 end
